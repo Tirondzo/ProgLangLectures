@@ -1,0 +1,53 @@
+name: PDF Generator
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Use Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: '12.x'
+
+    - name: NPM install
+      run: npm install --prefix ./generate-pdf
+
+    - name: Generating PDF
+      run: npm start --prefix ./generate-pdf
+
+    - name: 'Set build id'
+      id: build_id
+      # add a step output `steps.build_id.outputs.id` as the unique id
+      run: echo "::set-output name=id::$(date +%s)"
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1.0.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.build_id.outputs.id }}
+        release_name: Merged lectures
+        draft: false
+        prerelease: false
+    - name: Upload PDF Asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./generate-pdf/out/AllInOne.pdf
+        asset_name: AllInOne.pdf
+        asset_content_type: application/pdf
+    - name: Upload Merged MD Asset
+      uses: actions/upload-release-asset@v1.0.1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ./generate-pdf/out/AllInOne.md
+        asset_name: AllInOne.md
+        asset_content_type: text/markdown
