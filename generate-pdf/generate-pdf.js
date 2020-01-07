@@ -12,7 +12,7 @@ const OUT_FILES = [OUT_MERGED_MD, OUT_BLACK_PDF, OUT_COLOR_PDF, OUT_NUPED_PDF]
 
 const options_black = {
   // Styles are taken from here: https://highlightjs.org/download/
-  highlightCssPath:"./highlight_styles/ascetic.css",
+  highlightCssPath:"./highlight_styles/grayscale.css",
   paperBorder:"1cm"
 }
 
