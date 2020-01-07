@@ -122,7 +122,7 @@ $$ \forall stack(s) \forall value(x)     push(s, x) => pop(s) = x $$
 )
 ```
 
-``` JavaScript
+```JavaScript
 // JavaScript
 function addY(Y) {
 	return X => X + Y
